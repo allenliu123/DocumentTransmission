@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>file</title>
+	<link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="public/css/index.css">
+	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+	<script type="text/javascript" src="public/js/index.js"></script>
+</head>
+<body>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="del" value="">是的</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">不了</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="navbar navbar-light">
+		<div class="container">
+			<h1 style="font-family: 'Lobster', cursive;">Integrated Document Transmission</h1>
+		</div>
+	</div>
+	<br><br>
+
+	<div class="alert alert-info alert-dismissible fade show" style="" role="alert"></div>
+
+	<div class="container">
+		<div class="form-group">
+			<textarea class="form-control" id="textarea" rows="7"></textarea>
+		</div>
+		<div>
+			<!-- <form action="/upload" enctype="multipart/form-data" method="post"> -->
+			<input type="file" style="display: none" class="btn" id="upload">
+			<!-- <input type="submit" value="sun"> -->
+			<label class="btn btn-outline-info" for="upload"><i class="fa fa-upload"></i> 上传文件</label>
+			<label class="btn btn-outline-info" id="operation"><i class="fa fa-bars"></i> 批量操作</label>
+			<label class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal" id="seleteDel" style="display: none"><i class="fa fa-trash"></i> 删除</label>
+			<label class="btn btn-outline-info" id="textUpload">上传文本</label>
+			<label class="btn btn-outline-info" id="textShow">显示文本</label>
+		</div>
+		
+		<div class="content">
+			<li class="row">
+				<div class="col-md-4">
+					<button class="btn btn-outline-info btn-sm" style="display: none" id="seleteAll" name=false>全选</button>
+					名字
+				</div>
+				<div class="col-md-4">操作</div>
+				<div class="col-md-2">大小</div>
+				<div class="col-md-2">日期</div>
+			</li>
+		
+			<ul class="list-unstyled" id="fileList">
+				{% for file in fileList %}
+				<li class="row">
+					<span class="col-md-4">
+						<span class="checkboxs" style="display: none">
+							<input type="checkbox" value="{{file.name}}"> <i class="far fa-file"></i>
+						</span>
+					{{file.name}}
+					</span>
+					<span class="col-md-4" style="opacity: 0.5">
+						<a href="javascript:;" onclick="del(this)" title="删除" data-toggle="modal" data-target="#exampleModal" class="delBtn" name="{{file.name}}"><i class="far fa-trash-alt fa-lg"></i></a>
+						<a href="./public/data/{{file.name}}" title="下载" download><i class="fa fa-arrow-down fa-lg"></i></a>
+						<a href="./public/data/{{file.name}}" title="打开" target="_block"><i class="far fa-envelope-open fa-lg"></i></a>
+						<a href="javascript:;" onclick="copy(this)" title="复制链接地址" name="{{file.name}}" ><i class="far fa-copy fa-lg"></i></a>
+					</span>
+						
+					<span class="col-md-2">{{file.size}}</span>
+						
+					<span class="col-md-2">{{file.time}}</span>
+				</li>
+				{% endfor %}
+			</ul>
+			<input type="text" id="copy">
+		</div>
+		
+	</div>
+
+	<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+	
+</body>
+</html>
