@@ -156,7 +156,7 @@ function refresh(){
 								'<a href="javascript:;" onclick="del(this)" title="删除" data-toggle="modal" data-target="#exampleModal" class="delBtn"  name="' +
 								 file.name + '"><i class="far fa-trash-alt fa-lg"></i></a>' +
 								'<a href="./public/data/' + file.name + '" title="下载" download><i class="fa fa-arrow-down fa-lg"></i></a>' +
-								'<a href="./public/data/' + file.name + '" title="打开"><i class="far fa-envelope-open fa-lg"></i></a>' +
+								'<a href="./public/data/' + file.name + '" title="打开" target="_block"><i class="far fa-envelope-open fa-lg"></i></a>' +
 								'<a href="javascript:;" onclick="copy(this)" title="复制链接地址" name="' + file.name + '"><i class="far fa-copy fa-lg"></i></a>' +
 							'</span>' +
 							'<span class="col-md-2">' + file.size + '</span>'+
