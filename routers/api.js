@@ -68,7 +68,7 @@ router.get('/init', function(req, res){
 });
 
 router.post('/delete', function(req, res, next){
-	
+	console.log(req.body.filename);
 	var filename = req.body.filename.split(" ");
 	filename.forEach(function(file){
 		if(file){

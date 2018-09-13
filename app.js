@@ -8,6 +8,12 @@ app.use(express.bodyParser({uploadDir: "./public/data"}));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(function(req, res, then){
+	res.header("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+	then();
+});
+
 // app.use(app.router);
 
 swig.setDefaults({cache:false});
