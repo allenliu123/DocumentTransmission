@@ -23,25 +23,54 @@ $(document).ready(function(){
 		var formData = new FormData();
 		if($("#upload")[0].files[0]){
 			formData.append("file",$("#upload")[0].files[0]);
-			$.ajax({
-				url : 'upload',
-				type : 'POST',
-				data : formData,
-				processData : false,
-				contentType : false,
-				beforeSend: function(){
-					$('.alert').html("正在上传，请稍候");
-					$('.alert').fadeIn();
-				},
-				success: function(result) {
-					$('.alert').html(result.message);
+			var str='<h5>文件: '+$("#upload")[0].files[0].name+' 上传中</h5>';
+			str+='<div class="progress" id="progress"><div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>'
+			document.getElementById('drop_area').innerHTML=str;
+
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'upload');
+			xhr.upload.onprogress = function(e){
+				$('#progress .progress-bar').width(parseInt(e.loaded/e.total*100)+"%");
+			};
+			xhr.send(formData);
+			//ajax返回
+			xhr.onreadystatechange = function(){
+				if ( xhr.readyState == 4 && xhr.status == 200 ) {
+					$('.alert').html(JSON.parse(xhr.responseText).message);
 					showAlert();
-					refresh();
-				},
-				error: function(result) {
-					console.log("error");
+					document.getElementById('drop_area').innerHTML = '<h3>将文件拖拽到此,双击切换为输入模式</h3>';
+					// setTimeout(function(){
+						refresh();
+					// }, 500);
 				}
-			});
+			};
+			//设置超时时间
+			xhr.timeout = 100000;
+			xhr.ontimeout = function(event){
+				alert('请求超时！');
+			}
+			// $.ajax({
+			// 	url : 'upload',
+			// 	type : 'POST',
+			// 	data : formData,
+			// 	processData : false,
+			// 	contentType : false,
+			// 	// xhr: xhrOnProgress(function (e) {
+	  //  //              console.log('onprogress');
+	  //  //          }),
+			// 	beforeSend: function(){
+			// 		$('.alert').html("正在上传，请稍候");
+			// 		$('.alert').fadeIn();
+			// 	},
+			// 	success: function(result) {
+			// 		$('.alert').html(result.message);
+			// 		showAlert();
+			// 		refresh();
+			// 	},
+			// 	error: function(result) {
+			// 		console.log("error");
+			// 	}
+			// });
 		}
 	})
 
@@ -124,6 +153,12 @@ $(document).ready(function(){
 			}
 		});
 	})
+
+	// 点击切换模式
+	$('#drop_area').on('dblclick', function(){
+		$('#box').html('<textarea class="form-control" id="textarea" rows="7"></textarea>');
+		
+	});
 });
 
 function del(the){
@@ -137,7 +172,7 @@ function copy(the){
 	$('#copy').val(url);
 	var Url2=document.getElementById("copy");
 		Url2.select(); // 选择对象  
-		document.execCommand("Copy");
+		document.execCommand("Cut");
 		$('.alert').html("已复制到剪贴板");
 		showAlert();
 }
@@ -174,3 +209,77 @@ function showAlert(){
 		$('.alert').fadeOut();
 	},2500);
 }
+
+//+++++ 拖拽上传功能 ++++++
+
+// 清除拖拽默认事件
+document.addEventListener("drop",function(e){  //拖离   
+    e.preventDefault();      
+})  
+document.addEventListener("dragleave",function(e){  //拖后放   
+    e.preventDefault();      
+})  
+document.addEventListener("dragenter",function(e){  //拖进  
+    e.preventDefault();      
+})  
+document.addEventListener("dragover",function(e){  //拖来拖去    
+    e.preventDefault();      
+})  
+
+// 逻辑
+var box = document.getElementById('drop_area'); //拖拽区域     
+box.addEventListener("drop",function(e){
+	var fileList = e.dataTransfer.files; //获取文件对象    
+	//检测是否是拖拽文件到页面的操作            
+	if(fileList.length == 0){                
+	    return false;            
+	}             
+	//拖拉图片到浏览器，可以实现预览功能    
+	//规定视频格式  
+	Array.prototype.S=String.fromCharCode(2);  
+	Array.prototype.in_array=function(e){  
+	    var r=new RegExp(this.S+e+this.S);  
+	    return (r.test(this.S+this.join(this.S)+this.S));  
+	};  
+	var video_type=["video/mp4","video/ogg"];  
+	
+	//创建一个url连接,供src属性引用  
+	var fileurl = window.URL.createObjectURL(fileList[0]);
+	if(fileList[0].type.indexOf('image') === 0){
+		var str="<img height='80%' src='"+fileurl+"'><br>";
+		document.getElementById('drop_area').innerHTML=str;
+	}else if(video_type.in_array(fileList[0].type)){
+		var str="<video height='80%' controls='controls' src='"+fileurl+"'></video><br>";
+		document.getElementById('drop_area').innerHTML=str;
+	}else{
+		var str='<h5>文件: '+fileList[0].name+' 上传中</h5>';
+	}
+	str+='<div class="progress" id="progress"><div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>'
+	document.getElementById('drop_area').innerHTML=str;
+
+	resultfile = fileList[0];
+	var xhr = new XMLHttpRequest();
+	var formData = new FormData(); 
+	formData.append('file', resultfile);
+	xhr.open('POST', 'upload');
+	xhr.upload.onprogress = function(e){
+		$('#progress .progress-bar').width(parseInt(e.loaded/e.total*100)+"%");
+	};
+	xhr.send(formData);
+	//ajax返回
+	xhr.onreadystatechange = function(){
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			$('.alert').html(JSON.parse(xhr.responseText).message);
+			showAlert();
+			document.getElementById('drop_area').innerHTML = '<h3>将文件拖拽到此,双击切换为输入模式</h3>';
+			// setTimeout(function(){
+				refresh();
+			// }, 500);
+		}
+	};
+	//设置超时时间
+	xhr.timeout = 100000;
+	xhr.ontimeout = function(event){
+		alert('请求超时！');
+	}
+},false);

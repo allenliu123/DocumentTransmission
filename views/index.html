@@ -9,9 +9,7 @@
 	<link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/green.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="public/css/index.css">
 	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
-	<script type="text/javascript" src="public/js/index.js"></script>
+	
 </head>
 <body>
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,25 +41,29 @@
 	<div class="alert alert-info alert-dismissible fade show" style="" role="alert"></div>
 
 	<div class="container">
-		<div class="form-group">
-			<textarea class="form-control" id="textarea" rows="7"></textarea>
+		<div class="form-group" id="box">
+			<!-- <textarea class="form-control" id="textarea" rows="7"></textarea> -->
+			<div id="drop_area" align="center">
+				<h3>将文件拖拽到此上传,双击切换为输入模式</h3>
+				
+			</div>
 		</div>
 		<div>
 			<!-- <form action="/upload" enctype="multipart/form-data" method="post"> -->
 			<input type="file" style="display: none" class="btn" id="upload">
 			<!-- <input type="submit" value="sun"> -->
 			<label class="btn btn-outline-info" for="upload"><i class="fa fa-upload"></i> 上传文件</label>
-			<label class="btn btn-outline-info" id="operation"><i class="fa fa-bars"></i> 批量操作</label>
-			<label class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal" id="seleteDel" style="display: none"><i class="fa fa-trash"></i> 删除</label>
 			<label class="btn btn-outline-info" id="textUpload">上传文本</label>
 			<label class="btn btn-outline-info" id="textShow">显示文本</label>
+			<label class="btn btn-outline-info" id="operation"><i class="fa fa-bars"></i> 批量操作</label>
 		</div>
 		
 		<div class="content">
 			<li class="row">
 				<div class="col-md-4">
-					<button class="btn btn-outline-info btn-sm" style="display: none" id="seleteAll" name=false>全选</button>
 					名字
+					<button class="btn btn-outline-info btn-sm" style="display: none" id="seleteAll" name=false>全选</button>
+					<button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModal" id="seleteDel" style="display: none"><i class="fa fa-trash"></i> 删除</button>
 				</div>
 				<div class="col-md-4">操作</div>
 				<div class="col-md-2">大小</div>
@@ -94,9 +96,10 @@
 		</div>
 		
 	</div>
-
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-
+	<script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+	<script type="text/javascript" src="public/js/index.js"></script>
 	
 </body>
 </html>

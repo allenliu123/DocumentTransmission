@@ -53,3 +53,34 @@ ul a:hover {
 	top:0px;
 	z-index: -1
 }
+
+#operation {
+	float: right;
+}
+
+#drop_area {
+	border: 3px dashed silver;
+	border-radius: 40px;
+	width: 100%;
+	height:200px;
+}
+
+#drop_area h3{
+	margin-top: 80px;
+	color: silver;
+}
+
+#drop_area h5{
+	margin-top: 60px;
+	color: silver;
+}
+
+#back {
+	position: relative;
+	top: -40px;
+}
+
+#progress {
+	margin-left: 20%;
+	margin-right: 20%
+}
