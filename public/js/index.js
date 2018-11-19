@@ -157,7 +157,7 @@ $(document).ready(function(){
 	// 点击切换模式
 	$('#drop_area').on('dblclick', function(){
 		$('#box').html('<textarea class="form-control" id="textarea" rows="7"></textarea>');
-		
+		$('#textUpload, #textShow').show();
 	});
 });
 

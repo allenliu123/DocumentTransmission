@@ -84,3 +84,7 @@ ul a:hover {
 	margin-left: 20%;
 	margin-right: 20%
 }
+
+#textUpload, #textShow{
+	display: none;
+}
