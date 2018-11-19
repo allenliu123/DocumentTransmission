@@ -24,7 +24,9 @@ app.set('view engine','html');
 app.use('/public',express.static( __dirname + '/public'));
 
 app.use('/',require('./routers/api'));
-
+if(!fs.existsSync('./public/data/')){
+	fs.mkdirSync('./public/data/');
+}
 console.log("server start success in port 8081")
 
 app.listen(8081);
