@@ -154,10 +154,28 @@ $(document).ready(function(){
 		});
 	})
 
+	// 保存为文本文件
+	$('#textSave').on('click', function(){
+		$.ajax({
+			type: 'post',
+			url: 'saveText',
+			data: {
+				textarea: $('#textarea').val()
+			},
+			success: function(result){
+				$('.alert').html(result.message);
+				showAlert();
+				$('#textarea').val('');
+				refresh();
+			}
+		});
+	})
+
 	// 点击切换模式
 	$('#drop_area').on('dblclick', function(){
-		$('#box').html('<textarea class="form-control" id="textarea" rows="7"></textarea>');
-		$('#textUpload, #textShow').show();
+		$('#box').html('<textarea class="form-control" id="textarea" rows="7" autofocus></textarea>');
+		$('#textUpload, #textShow, #textSave').show();
+		$('#uploadBtn').hide();
 	});
 });
 

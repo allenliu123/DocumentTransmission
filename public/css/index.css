@@ -85,6 +85,6 @@ ul a:hover {
 	margin-right: 20%
 }
 
-#textUpload, #textShow{
+#textUpload, #textShow, #textSave{
 	display: none;
 }

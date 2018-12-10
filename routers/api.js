@@ -68,7 +68,7 @@ router.get('/init', function(req, res){
 });
 
 router.post('/delete', function(req, res, next){
-	console.log(req.body.filename);
+	console.log('delete: ' + req.body.filename);
 	var filename = req.body.filename.split(" ");
 	filename.forEach(function(file){
 		if(file){
@@ -82,6 +82,26 @@ router.post('/upload', function(req, res, next){
 	var uploadFile = req.files.file;
 	fs.rename(uploadFile.path, './public/data/' + uploadFile.originalFilename.replace(/ /g,"-"), function(){});
 	res.json({message: '上传成功'});
+});
+
+router.post('/saveText', function(req, res, next){
+	var textarea = req.body.textarea;
+	
+	fs.writeFile('content.txt',textarea,function(err){
+		if (err) {
+			res.json({message: '保存文本失败' + errs});
+	   	}
+	   	else{
+			if(textarea.length == 0){
+				res.json({message: '文本为空'});
+				return;
+			}
+			var date = new Date();
+			var dateString = date.toLocaleString().replace(' ', '_');
+			fs.copyFileSync('./content.txt', './public/data/'+dateString+'.txt');
+	   		res.json({message: '已保存为' + dateString + '.txt'});
+	   	}
+	});
 });
 
 router.post('/postText', function(req, res, next){
