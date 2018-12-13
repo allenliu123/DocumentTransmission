@@ -2,6 +2,10 @@
 
 ## Usage
 
+`git clone https://github.com/allenliu123/DocumentTransmission.git`
+
+`cd DocumentTransmission`
+
 `npm install`
 
 `node app.js`
