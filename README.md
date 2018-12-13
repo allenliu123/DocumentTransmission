@@ -1,10 +1,10 @@
-# document-Transmission
+# Document-Transmission
 
 ## Usage
 
-> npm install
+`npm install`
 
-> node app.js
+`node app.js`
 
 > it run this website on port 8081
 
