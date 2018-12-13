@@ -6,7 +6,7 @@
 
 `node app.js`
 
-> it run this website on port 8081
+> it will run this website on port 8081
 
 ## todo
 
