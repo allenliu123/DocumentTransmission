@@ -185,7 +185,7 @@ function del(the){
 }
 
 function copy(the){
-	var url = window.location.host;
+	var url = "https://" + window.location.host;
 	url += "/public/data/" + the.name;
 	$('#copy').val(url);
 	var Url2=document.getElementById("copy");
