@@ -98,7 +98,7 @@ router.post('/saveText', function(req, res, next){
 			}
 			var date = new Date();
 			var dateString = date.toLocaleString().replace(' ', '_');
-			fs.copyFileSync('./content.txt', './public/data/'+dateString+'.txt');
+			fs.copyFileSync('./content.txt', './public/data/'+dateString+'.txt', (err) => {});
 	   		res.json({message: '已保存为' + dateString + '.txt'});
 	   	}
 	});
