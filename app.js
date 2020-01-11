@@ -27,6 +27,16 @@ app.use('/',require('./routers/api'));
 if(!fs.existsSync('./public/data/')){
 	fs.mkdirSync('./public/data/');
 }
-console.log("server start success in port 8081")
 
-app.listen(8081);
+var env = process.env.NODE_ENV;
+if(env === 'file') {
+	app.listen(8081);
+	console.log(env + " project, server start success in port 8081")
+} else if(env === 'static') {
+	app.listen(8082);
+	console.log(env + " project, server start success in port 8082")
+} else {
+	app.listen(8080);
+	console.log("server start success in port 8080")
+}
+

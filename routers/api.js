@@ -78,6 +78,11 @@ router.get('/init', function(req, res){
 });
 
 router.post('/delete', function(req, res, next){
+	var env = process.env.NODE_ENV;
+	if(env === 'static') {
+		res.json({message: "这是static，禁止删除"});
+		return
+	}
 	console.log('delete: ' + req.body.filename);
 	var filename = req.body.filename.split(" ");
 	filename.forEach(function(file){
