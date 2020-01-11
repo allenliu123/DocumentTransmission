@@ -54,8 +54,9 @@ ul a:hover {
 	z-index: -1
 }
 
-#operation {
+#toggle, #operation {
 	float: right;
+	margin-left: 0.2em;
 }
 
 #drop_area {
@@ -63,6 +64,7 @@ ul a:hover {
 	border-radius: 40px;
 	width: 100%;
 	height:200px;
+	text-align: center;
 }
 
 #drop_area h3{
@@ -73,7 +75,6 @@ ul a:hover {
 #drop_area h5{
 	margin-top: 60px;
 	color: silver;
-	text-align: center;
 }
 
 #back {

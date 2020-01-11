@@ -3,6 +3,16 @@ var router = express();
 var fs = require('fs');
 var moment = require('moment');
 
+var generateUUID = function() {
+	var s = [];
+	var hexDigits = "0123456789abcdef";
+	for (var i = 0; i < 16; i++) {
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+	}
+	var uuid = s.join("");
+	return uuid;
+}
+
 router.get('/',function(req, res, next){
 
 	files = fs.readdirSync('./public/data/');
@@ -80,14 +90,14 @@ router.post('/delete', function(req, res, next){
 
 router.post('/upload', function(req, res, next){
 	var uploadFile = req.files.file;
-	fs.rename(uploadFile.path, './public/data/' + uploadFile.originalFilename.replace(/ /g,"-"), function(){});
+	fs.rename(uploadFile.path, './public/data/' + generateUUID() + '-' + uploadFile.originalFilename.replace(/ /g,"-"), function(){});
 	res.json({message: '上传成功'});
 });
 
 router.post('/saveText', function(req, res, next){
 	var textarea = req.body.textarea;
 	
-	fs.writeFile('content.txt',textarea,function(err){
+	fs.writeFile('./public/content.txt',textarea,function(err){
 		if (err) {
 			res.json({message: '保存文本失败' + errs});
 	   	}
@@ -96,10 +106,9 @@ router.post('/saveText', function(req, res, next){
 				res.json({message: '文本为空'});
 				return;
 			}
-			var date = new Date();
-			var dateString = date.toLocaleString().replace(' ', '_');
-			fs.copyFileSync('./content.txt', './public/data/'+dateString+'.txt', (err) => {});
-	   		res.json({message: '已保存为' + dateString + '.txt'});
+			var uuid = generateUUID()
+			fs.copyFileSync('./public/content.txt', './public/data/'+uuid+'.txt', (err) => {});
+	   		res.json({message: '已保存为' + uuid + '.txt'});
 	   	}
 	});
 });
@@ -107,7 +116,7 @@ router.post('/saveText', function(req, res, next){
 router.post('/postText', function(req, res, next){
 	var textarea = req.body.textarea;
 	
-	fs.writeFile('content.txt',textarea,function(err){
+	fs.writeFile('./public/content.txt',textarea,function(err){
 		if (err) {
 			res.json({message: '文本上传失败  ' + errs});
 	   	}
@@ -118,22 +127,18 @@ router.post('/postText', function(req, res, next){
 });
 
 router.get('/getText', function(req, res, next){
-	var buf = new Buffer(1024);
-	fs.open('content.txt', 'r+', function(err, fd) {
-		if (err) {
-			return console.error(err);
-		}
-		fs.read(fd, buf, 0, buf.length, 0, function(err, bytes){
-			if (err){
-				console.log(err);
-			}
 
-			if(bytes > 0){
-				var str = buf.slice(0, bytes).toString();
-				res.json({content: str});
+	if(!fs.existsSync('./public/content.txt')){
+		res.json({content: ''});
+	} else {
+		fs.readFile('./public/content.txt', { encoding:"utf-8" }, function(err, data) {
+			if (err) {
+				res.json({content: ''});
+			} else {
+				res.json({content: data});
 			}
-	  });
-	});
+		});
+	}
 });
 
 module.exports = router;

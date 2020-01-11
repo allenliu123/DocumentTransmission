@@ -1,5 +1,35 @@
-$(document).ready(function(){
+function uploadFile(file) {
+	var formData = new FormData();
+	formData.append("file", file);
+	var str='<h5>文件: '+file.name+' 上传中</h5>';
+	str+='<div class="progress" id="progress"><div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>'
+	document.getElementById('drop_area').innerHTML=str;
 
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'upload');
+	xhr.upload.onprogress = function(e){
+		$('#progress .progress-bar').width(parseInt(e.loaded/e.total*100)+"%");
+	};
+	xhr.send(formData);
+	//ajax返回
+	xhr.onreadystatechange = function(){
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			$('.alert').html(JSON.parse(xhr.responseText).message);
+			showAlert();
+			document.getElementById('drop_area').innerHTML = '<h3>将文件拖拽到此,双击切换为输入模式</h3>';
+			// setTimeout(function(){
+				refresh();
+			// }, 500);
+		}
+	};
+	//设置超时时间
+	xhr.timeout = 100000;
+	xhr.ontimeout = function(event){
+		alert('请求超时！');
+	}
+}
+
+$(document).ready(function(){
 	// 点击删除时， 发送文件名给后台处理
 	$('#del').on('click', function(){
 		$.ajax({
@@ -20,57 +50,8 @@ $(document).ready(function(){
 
 	// 点击上传时， 将所选择的文件发给后台处理
 	$('#upload').on('change', function(){
-		var formData = new FormData();
 		if($("#upload")[0].files[0]){
-			formData.append("file",$("#upload")[0].files[0]);
-			var str='<h5>文件: '+$("#upload")[0].files[0].name+' 上传中</h5>';
-			str+='<div class="progress" id="progress"><div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>'
-			document.getElementById('drop_area').innerHTML=str;
-
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', 'upload');
-			xhr.upload.onprogress = function(e){
-				$('#progress .progress-bar').width(parseInt(e.loaded/e.total*100)+"%");
-			};
-			xhr.send(formData);
-			//ajax返回
-			xhr.onreadystatechange = function(){
-				if ( xhr.readyState == 4 && xhr.status == 200 ) {
-					$('.alert').html(JSON.parse(xhr.responseText).message);
-					showAlert();
-					document.getElementById('drop_area').innerHTML = '<h3>将文件拖拽到此,双击切换为输入模式</h3>';
-					// setTimeout(function(){
-						refresh();
-					// }, 500);
-				}
-			};
-			//设置超时时间
-			xhr.timeout = 100000;
-			xhr.ontimeout = function(event){
-				alert('请求超时！');
-			}
-			// $.ajax({
-			// 	url : 'upload',
-			// 	type : 'POST',
-			// 	data : formData,
-			// 	processData : false,
-			// 	contentType : false,
-			// 	// xhr: xhrOnProgress(function (e) {
-	  //  //              console.log('onprogress');
-	  //  //          }),
-			// 	beforeSend: function(){
-			// 		$('.alert').html("正在上传，请稍候");
-			// 		$('.alert').fadeIn();
-			// 	},
-			// 	success: function(result) {
-			// 		$('.alert').html(result.message);
-			// 		showAlert();
-			// 		refresh();
-			// 	},
-			// 	error: function(result) {
-			// 		console.log("error");
-			// 	}
-			// });
+			uploadFile($("#upload")[0].files[0])
 		}
 	})
 
@@ -171,12 +152,49 @@ $(document).ready(function(){
 		});
 	})
 
-	// 点击切换模式
-	$('#drop_area').on('dblclick', function(){
-		$('#box').html('<textarea class="form-control" id="textarea" rows="7" autofocus></textarea>');
-		$('#textUpload, #textShow, #textSave').show();
-		$('#uploadBtn').hide();
-	});
+	// toggle
+	$('#toggle').on('click', function(){
+		toggle('')
+	})
+
+	function toggle(str) {
+		var modeId = $('#box')[0].children[0].id
+		if(modeId === 'drop_area') {
+			$('#box').html('<textarea class="form-control" id="textarea" rows="7" autofocus>'+str+'</textarea>');
+			$('textarea').on('paste', function(e){
+				e.stopPropagation();
+			})
+		} else if(modeId === 'textarea') {
+			$('#box').html('<div id="drop_area"><h3>将文件拖拽到此上传</h3></div>');
+		}
+		$('#textUpload, #textShow, #textSave').toggle();
+		$('#uploadBtn').toggle();
+	}
+
+	// 粘贴图片或文字
+	document.addEventListener('paste', function (e) {
+		if ( !(e.clipboardData && e.clipboardData.items) ) {
+			return ;
+		}
+		if(e.clipboardData.items[0]){
+			var item = e.clipboardData.items[0];
+			if (item.kind === "string") {
+					item.getAsString(function (str) {
+						toggle(str)
+						// 复制文件后粘贴自动上传
+						// var localFileName = str.split('\n')[2]
+						// if(localFileName && localFileName.substr(0, 4) === 'file') {
+						// 	var filePath = localFileName.slice(7,localFileName.length)
+						// } else {
+						// 	toggle(str)
+						// }
+					})
+			} else if (item.kind === "file") {
+					var pasteFile = item.getAsFile();
+					uploadFile(pasteFile)
+			}
+		}
+	}, false);
 });
 
 function del(the){
@@ -248,7 +266,7 @@ document.addEventListener("dragover",function(e){  //拖来拖去
 var box = document.getElementById('drop_area'); //拖拽区域     
 box.addEventListener("drop",function(e){
 	var fileList = e.dataTransfer.files; //获取文件对象    
-	//检测是否是拖拽文件到页面的操作            
+	//检测是否是拖拽文件到页面的操作
 	if(fileList.length == 0){                
 	    return false;            
 	}             
