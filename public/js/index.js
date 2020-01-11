@@ -165,7 +165,7 @@ $(document).ready(function(){
 				e.stopPropagation();
 			})
 		} else if(modeId === 'textarea') {
-			$('#box').html('<div id="drop_area"><h3>将文件拖拽到此上传</h3></div>');
+			$('#box').html('<div id="drop_area"><h3>将文件拖拽到此上传，或直接按 ctrl+v 粘贴截图或文字</h3></div>');
 		}
 		$('#textUpload, #textShow, #textSave').toggle();
 		$('#uploadBtn').toggle();
