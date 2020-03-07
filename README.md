@@ -1,13 +1,29 @@
 # Document-Transmission
-
 demo website https://file.ifthat.com
 
-## Usage
-
+## Install
 ``` bash
 git clone https://github.com/allenliu123/DocumentTransmission.git`
 cd DocumentTransmission
 npm install
+
+```
+
+## Run
+```
+export NODE_ENV=file
+node app.js
+```
+> it will run this website on port 8081
+
+```
+export NODE_ENV=static
+node app.js
+```
+> it will run this website on port 8082
+> static 模式禁止山删除文件
+
+```
 node app.js
 ```
 > it will run this website on port 8080
