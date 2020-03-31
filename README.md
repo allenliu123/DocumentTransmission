@@ -21,7 +21,7 @@ export NODE_ENV=static
 node app.js
 ```
 > it will run this website on port 8082
-> static 模式禁止山删除文件
+> static 模式禁止删除文件
 
 ```
 node app.js
@@ -47,3 +47,7 @@ node app.js
 - [x] 粘贴截图上传
 - [ ] 粘贴文件
 - [ ] 文件下拉加载
+
+## 添加 Telegram Bot
+
+可以使用 Telegram 机器人来操作，[@ifthat](https://t.me/ifthat_bot)，详见 https://github.com/allenliu123/ifthat-bot
