@@ -29,13 +29,13 @@ if(!fs.existsSync('./public/data/')){
 	fs.mkdirSync('./public/data/');
 }
 
-var env = process.env.NODE_ENV;
-if(env === 'file') {
+var type = process.env.type;
+if(type && type === 'file') {
 	app.listen(8081);
-	console.log(env + " project, server start success in port 8081")
-} else if(env === 'static') {
+	console.log(type + " project, server start success in port 8081")
+} else if(type && type === 'static') {
 	app.listen(8082);
-	console.log(env + " project, server start success in port 8082")
+	console.log(type + " project, server start success in port 8082")
 } else {
 	app.listen(8080);
 	console.log("server start success in port 8080")

@@ -78,8 +78,8 @@ router.get('/init', function(req, res){
 });
 
 router.post('/delete', function(req, res, next){
-	var env = process.env.NODE_ENV;
-	if(env === 'static') {
+	var type = process.env.type;
+	if(type && type === 'static') {
 		res.json({message: "这是static，禁止删除"});
 		return
 	}

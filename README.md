@@ -10,22 +10,8 @@ npm install
 ```
 
 ## Run
-```
-export NODE_ENV=file
-node app.js
-```
-> it will run this website on port 8081
+`node app.js`
 
-```
-export NODE_ENV=static
-node app.js
-```
-> it will run this website on port 8082
-> static 模式禁止删除文件
-
-```
-node app.js
-```
 > it will run this website on port 8080
 
 ## Features
