@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "clipboard": "^2.0.1",
+    "dotenv": "^8.2.0",
     "express": "^3.21.2",
     "moment": "^2.22.2",
     "swig": "^1.4.2"

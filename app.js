@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express');
 var swig = require('swig');
 var fs = require('fs');
