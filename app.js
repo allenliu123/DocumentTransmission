@@ -25,6 +25,7 @@ app.set('view engine','html');
 app.use('/public',express.static( __dirname + '/public'));
 
 app.use('/',require('./routers/api'));
+app.use('/shard',require('./routers/shard'));
 if(!fs.existsSync('./public/data/')){
 	fs.mkdirSync('./public/data/');
 }
