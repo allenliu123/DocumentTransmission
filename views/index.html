@@ -10,7 +10,21 @@
 	<link href="public/css/index.css" rel="stylesheet">
 	<link href="public/css/font.css" rel="stylesheet">
 	<script>
-		window.localStorage.wmUserInfo = JSON.stringify({ userId: 'allen', userTag: 'tag1, tag2', projectVersion: '1.0.1' })
+		// Initialize the agent at application startup.
+		const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+			.then(FingerprintJS => FingerprintJS.load())
+	
+		// Get the visitor identifier when you need it.
+		fpPromise
+			.then(fp => fp.get())
+			.then(result => {
+				// This is the visitor identifier:
+				const visitorId = result.visitorId
+				window.localStorage.wmUserInfo = JSON.stringify({ userId: visitorId, userTag: 'file', projectVersion: '1.0.2' })
+			})
+	</script>
+	<script>
+		
 	</script>
 	<script src="public/js/webfunny.min.js"></script>
 </head>
