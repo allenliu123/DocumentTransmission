@@ -203,7 +203,8 @@ function del(the){
 }
 
 function copy(the){
-	var url = "https://" + window.location.host;
+// 	var url = "https://" + window.location.host;
+	var url = window.location.ancestorOrigins[0];
 	url += "/public/data/" + the.name;
 	$('#copy').val(url);
 	var Url2=document.getElementById("copy");
