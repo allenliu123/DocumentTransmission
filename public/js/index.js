@@ -203,8 +203,10 @@ function del(the){
 }
 
 function copy(the){
-// 	var url = "https://" + window.location.host;
-	var url = window.location.ancestorOrigins[0];     //域名解析为隐性URL的时候不向用户暴露host和端口
+	if(window.location.ancestorOrigins.length!=0)
+		var url = window.location.ancestorOrigins[0];
+	else 
+		var url = window.location.origin;
 	url += "/public/data/" + the.name;
 	$('#copy').val(url);
 	var Url2=document.getElementById("copy");
