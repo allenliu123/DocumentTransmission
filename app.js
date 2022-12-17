@@ -5,7 +5,10 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 
 var app = express();
-app.use(express.bodyParser({uploadDir: "./public/data"}));
+app.use(express.bodyParser({
+	limit: '1024mb',
+	uploadDir: "./public/data"}
+));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
