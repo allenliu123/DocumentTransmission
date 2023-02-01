@@ -43,10 +43,6 @@ router.post('/mergeFile', function(req, res) {
 		return
 	}
 	mergeFile(key, total, filename).then(() => {
-		const sourcePath = `./public/cache/${key}/${filename}`
-		const targetPath = `./public/data/${generateUUID()}-${filename.replace(/ /g,"-")}`
-		fs.renameSync(sourcePath, targetPath, function() {});
-		fs.rmdirSync(`./public/cache/${key}`)
 		res.json({message: '分片合并成功'})
 	}).catch(() => {
 		res.json({message: '分片合并异常'})
@@ -55,13 +51,15 @@ router.post('/mergeFile', function(req, res) {
 
 // 合并文件
 function mergeFile(key, chunkCount, filename) {
-	const writeStream = fs.createWriteStream(`./public/cache/${key}/${filename}`); 
+	const targetPath = `./public/data/${generateUUID()}-${filename.replace(/ /g,"-")}`
+	const writeStream = fs.createWriteStream(targetPath); 
 	return new Promise((resolve, reject) => {
 		// 递归合并文件
 		function mergeRec(key, chunkCount, chunkIndex) {
 			//结束标志为已合并数量大于总数（mergedChunkNum从0开始）
 			if (chunkIndex >= chunkCount) {
 				console.log(key, '合并完成')
+				fs.rmdirSync(`./public/cache/${key}`)
 				resolve()
 				return
 			}
