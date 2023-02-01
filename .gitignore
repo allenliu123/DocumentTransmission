@@ -1,6 +1,4 @@
 /public/data/*
-/public/cache/*
 /public/content.txt
 /node_modules
 .env
-.gitkeep
