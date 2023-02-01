@@ -18,7 +18,7 @@ router.get('/',function(req, res, next){
 	files = fs.readdirSync('./public/data/');
 	fileList = [];
 	files.forEach(function(file){
-		status = fs.statSync('./public/data/' + file);
+		const status = fs.statSync('./public/data/' + file);
 		var obj = new Object();
 		if(status.isDirectory()){
 			obj.type = "dir";
@@ -51,7 +51,7 @@ router.get('/init', function(req, res){
 	files = fs.readdirSync('./public/data/');
 	fileList = [];
 	files.forEach(function(file){
-		status = fs.statSync('./public/data/' + file);
+		const status = fs.statSync('./public/data/' + file);
 		var obj = new Object();
 		if(status.isDirectory()){
 			obj.type = "dir";

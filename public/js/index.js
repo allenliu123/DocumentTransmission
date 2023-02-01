@@ -1,3 +1,86 @@
+
+// 获取 base64 数据
+function blobToBase64(blob) {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+// 上传分片
+function uploadShard(key, index, chunkSize, file) {
+	return new Promise((resolve, reject) => {
+		const start = index * chunkSize
+		const shardBlob = file.slice(start, Math.min(start + chunkSize, file.size));
+		blobToBase64(shardBlob).then(base64 => {
+			$.ajax({
+				type: 'post',
+				url: 'shard/uploadShard',
+				data: {
+					key: key,
+					data: base64,
+					index: index
+				},
+				success: function(result){
+					console.log(result)
+					resolve()
+				}
+			});
+		})
+	})
+}
+// 合并分片
+function mergeFile(key, total, filename) {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			type: 'post',
+			url: 'shard/mergeFile',
+			data: {
+				key,
+				total,
+				filename
+			},
+			success: function(){
+				resolve()
+			}
+		});
+	})
+}
+
+// 分片上传
+function shardUpload(file) {
+	const fileReader = new FileReader()
+  fileReader.readAsBinaryString(file);
+  fileReader.onload = e => {
+		const filename = file.name.replace( /[`~!@#_$%^&*()=|{}':;'\s]/g, '-')
+    const md5 = SparkMD5.hashBinary(e.target.result);
+    const chunkSize = 4 * 1024 * 1024 // 4MB
+		const count = Math.ceil(file.size / chunkSize)
+		const promiseList = []
+		let successCount = 0
+		var str='<h5>文件: '+filename+' 上传中</h5>';
+		str+='<div class="progress" id="progress"><div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>'
+		document.getElementById('drop_area').innerHTML=str;
+		for(let i = 0; i < count; i++) {
+			promiseList.push(uploadShard(md5, i, chunkSize, file).then(() => {
+				successCount++
+				$('#progress .progress-bar').width(parseInt(successCount / count * 100)+"%");
+			}))
+		}
+		Promise.all(promiseList).then(() => {
+			document.getElementById('drop_area').innerHTML = '<h3>将文件拖拽到此,双击切换为输入模式</h3>';
+			setTimeout(() => {
+				mergeFile(md5, count, filename).then(() => {
+					$('.alert').html("上传成功");
+					showAlert()
+					refresh()
+				})
+			}, 1000)
+		})
+  }
+}
+
+// 单文件上传
 function uploadFile(file) {
 	var formData = new FormData();
 	formData.append("file", file);
@@ -50,8 +133,15 @@ $(document).ready(function(){
 
 	// 点击上传时， 将所选择的文件发给后台处理
 	$('#upload').on('change', function(){
-		if($("#upload")[0].files[0]){
-			uploadFile($("#upload")[0].files[0])
+		const file = $("#upload")[0].files[0]
+		if (!file) {
+			return
+		}
+		// if (file.size > 4 * 1024 * 1024) { // 4MB
+		if (1) {
+			shardUpload(file)
+		} else {
+			uploadFile(file)
 		}
 	})
 
