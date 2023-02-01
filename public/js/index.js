@@ -137,8 +137,8 @@ $(document).ready(function(){
 		if (!file) {
 			return
 		}
-		// if (file.size > 4 * 1024 * 1024) { // 4MB
-		if (1) {
+		if (file.size > 4 * 1024 * 1024) { // 4MB
+		// if (1) {
 			shardUpload(file)
 		} else {
 			uploadFile(file)
