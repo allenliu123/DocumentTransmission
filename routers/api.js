@@ -112,7 +112,7 @@ router.post('/saveText', function(req, res, next){
 				return;
 			}
 			var uuid = generateUUID()
-			fs.copyFileSync('./public/content.txt', './public/data/'+uuid+'.txt', (err) => {});
+			fs.copyFileSync('./public/content.txt', './public/data/'+uuid+'.txt', fs.constants.COPYFILE_EXCL, (err) => {});
 	   		res.json({message: '已保存为' + uuid + '.txt'});
 	   	}
 	});
