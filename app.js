@@ -9,6 +9,9 @@ var app = express();
 app.set('trust proxy', true);
 morgan.token('real-ip', function(req) {
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	if (ip && ip.indexOf(',') !== -1) {
+		ip = ip.split(',')[0];
+	}
 	if (ip && ip.indexOf('::ffff:') !== -1) {
 		ip = ip.replace('::ffff:', '');
 	}
