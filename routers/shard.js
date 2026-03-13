@@ -37,6 +37,7 @@ router.post('/uploadShard', function(req, res){
  */
 router.post('/mergeFile', function(req, res) {
 	const { key, total, filename } = req.body
+	console.log('mergeFile: ' + filename);
 	const chunkPath = `./public/cache/${key}`
 	if (!fs.existsSync(chunkPath))  {
 		res.json({message: '分片合并异常'})

@@ -95,6 +95,7 @@ router.post('/delete', function(req, res, next){
 
 router.post('/upload', function(req, res, next){
 	var uploadFile = req.files.file;
+	console.log('upload: ' + uploadFile.originalFilename);
 	fs.rename(uploadFile.path, './public/data/' + generateUUID() + '-' + uploadFile.originalFilename.replace(/ /g,"-"), function(){});
 	res.json({message: '上传成功'});
 });

@@ -3,8 +3,10 @@ var express = require('express');
 var swig = require('swig');
 var fs = require('fs');
 var bodyParser = require('body-parser');
+var morgan = require('morgan');
 
 var app = express();
+app.use(morgan('combined'));
 app.use(express.bodyParser({
 	limit: '1024mb',
 	uploadDir: "./public/data"}
