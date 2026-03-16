@@ -21,12 +21,18 @@ morgan.token('real-ip', function(req) {
 	return ip;
 });
 app.use(morgan(':real-ip - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
-app.use(express.bodyParser({
-	limit: '1024mb',
-	uploadDir: "./public/data"}
-));
-
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(function(req, res, next) {
+	if (req.path === '/upload' || req.path.indexOf('/shard') === 0) {
+		express.bodyParser({
+			limit: '1024mb',
+			uploadDir: "./public/data"
+		})(req, res, next);
+	} else {
+		bodyParser.json()(req, res, function() {
+			bodyParser.urlencoded({extended: true})(req, res, next);
+		});
+	}
+});
 
 app.use(function(req, res, then){
 	res.header("Access-Control-Allow-Origin", "*");
